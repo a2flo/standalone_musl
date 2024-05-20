@@ -132,6 +132,9 @@ $(CRT_OBJS): CFLAGS_ALL += -DCRT
 GCOMPAT_OBJS = $(filter obj/src/gcompat/%,$(ALL_OBJS:%.o=%.lo))
 $(GCOMPAT_OBJS): CFLAGS_ALL += -D_BSD_SOURCE
 
+BSD_OBJS = $(filter obj/src/bsd/%,$(ALL_OBJS:%.o=%.lo))
+$(BSD_OBJS): CFLAGS_ALL += -D_BSD_SOURCE
+
 $(LOBJS) $(LDSO_OBJS): CFLAGS_ALL += -fPIC
 
 CC_CMD = $(CC) $(CFLAGS_ALL) -c -o $@ $<
