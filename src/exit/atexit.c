@@ -9,8 +9,9 @@
 #define realloc undef
 #define free undef
 
-/* Ensure that at least 32 atexit handlers can be registered without malloc */
-#define COUNT 32
+/* Ensure that at least 256 atexit handlers can be registered without malloc */
+/* NOTE: if a malloc related crash happens in __libc_exit_fini(), this may need to be increased further */
+#define COUNT 256
 
 static struct fl
 {
