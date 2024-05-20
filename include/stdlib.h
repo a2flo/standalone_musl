@@ -172,6 +172,13 @@ long double strtold_l(const char *__restrict, char **__restrict, struct __locale
 #endif
 #endif
 
+// via libbsd
+void arc4random_stir(void);
+void arc4random_addrandom(unsigned char *dat, int datlen);
+unsigned int arc4random(void);
+void arc4random_buf(void *buf, size_t n);
+unsigned int arc4random_uniform(unsigned int upper_bound);
+
 #ifdef __cplusplus
 }
 #endif
