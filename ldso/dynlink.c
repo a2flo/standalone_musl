@@ -552,6 +552,10 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
 				reloc_addr[1] = tmp;
 			}
 			break;
+		case REL_IRELATIVE:
+			*reloc_addr = (size_t)base + addend;
+			*reloc_addr = ((size_t(*)(void))*reloc_addr)();
+			break;
 		default:
 			error("Error relocating %s: unsupported relocation type %d",
 				dso->name, type);

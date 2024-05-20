@@ -10,6 +10,7 @@
 #define REL_DTPOFF      R_X86_64_DTPOFF64
 #define REL_TPOFF       R_X86_64_TPOFF64
 #define REL_TLSDESC     R_X86_64_TLSDESC
+#define REL_IRELATIVE   R_X86_64_IRELATIVE
 
 #define CRTJMP(pc,sp) __asm__ __volatile__( \
 	"mov %1,%%rsp ; jmp *%0" : : "r"(pc), "r"(sp) : "memory" )
