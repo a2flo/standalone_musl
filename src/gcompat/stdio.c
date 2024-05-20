@@ -7,6 +7,7 @@
 #include <stddef.h> /* NULL, size_t */
 #include <stdio.h>  /* feof, fgets, fopen, fread, puts, v*printf */
 #include <string.h> /* strcmp */
+#include <stdlib.h>
 
 int __vasprintf_chk(char **strp, int flag, const char *format, va_list ap);
 int __vfprintf_chk(FILE *stream, int flag, const char *format, va_list ap);
@@ -250,4 +251,13 @@ __dprintf_chk (int d, int flags, const char *format, ...)
 	va_end(arg);
 
 	return done;
+}
+
+// not supported
+size_t parse_printf_format(const char *template, size_t n, int *argtypes) {
+	(void)template;
+	(void)n;
+	(void)argtypes;
+	fprintf(stderr, "parse_printf_format() is unsupported\n");
+	abort();
 }

@@ -6,7 +6,7 @@
 #define X(x) (((x)/256 | (x)*256) % 65536)
 #endif
 
-static const unsigned short table[] = {
+const unsigned short __ctype_b_table[] = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -33,9 +33,9 @@ X(0x8c6),X(0x8c6),X(0x8c6),X(0x4c0),X(0x4c0),X(0x4c0),X(0x4c0),X(0x200),
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 };
 
-static const unsigned short *const ptable = table+128;
+const unsigned short *const __ctype_b_ptable = __ctype_b_table+128;
 
 const unsigned short **__ctype_b_loc(void)
 {
-	return (void *)&ptable;
+	return (void *)&__ctype_b_ptable;
 }

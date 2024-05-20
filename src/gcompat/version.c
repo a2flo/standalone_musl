@@ -8,7 +8,7 @@
  */
 const char *gnu_get_libc_release(void)
 {
-	return "stable";
+	return "stable-musl-standalone";
 }
 
 /**

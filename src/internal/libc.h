@@ -7,8 +7,12 @@
 
 struct __locale_map;
 
+// NOTE: modified to provide glibc ABI compat
 struct __locale_struct {
-	const struct __locale_map *cat[6];
+	const struct __locale_map *cat[13 /* __MUSL_INTERNAL_LC_MAX */];
+	const unsigned short* __glibc_ctype_b;
+	const int* __glibc_ctype_tolower;
+	const int* __glibc_ctype_toupper;
 };
 
 struct tls_module {

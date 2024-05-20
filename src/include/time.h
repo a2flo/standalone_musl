@@ -10,6 +10,6 @@ hidden char *__asctime_r(const struct tm *, char *);
 hidden struct tm *__gmtime_r(const time_t *restrict, struct tm *restrict);
 hidden struct tm *__localtime_r(const time_t *restrict, struct tm *restrict);
 
-hidden size_t __strftime_l(char *restrict, size_t, const char *restrict, const struct tm *restrict, locale_t);
+size_t __strftime_l(char *restrict, size_t, const char *restrict, const struct tm *restrict, locale_t);
 
 #endif

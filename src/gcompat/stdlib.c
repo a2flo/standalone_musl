@@ -3,6 +3,7 @@
 #include <locale.h> /* locale_t */
 #include <stddef.h> /* NULL, size_t */
 #include <stdlib.h> /* getenv, realpath, strto* */
+#include <stdio.h>
 #include <unistd.h> /* get*id */
 
 #include "alias.h"
@@ -126,4 +127,20 @@ unsigned long long int strtoull_l(const char *nptr, char **endptr, int base,
 unsigned long long strtouq(const char *nptr, char **endptr, int base)
 {
 	return strtoull(nptr, endptr, base);
+}
+
+// stubs for f128
+int strfromf128(char *dst, size_t size, const char *format, __float128 value) {
+	(void)dst;
+	(void)size;
+	(void)format;
+	(void)value;
+	return -1;
+}
+__float128 strtof128(const char *nptr, char **endptr) {
+	(void)nptr;
+	(void)endptr;
+	fprintf(stderr, "strtof128 not implemented\n");
+	abort();
+	return (__float128)0.0;
 }

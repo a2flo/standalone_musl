@@ -8,6 +8,7 @@
 
 #define LOCALE_NAME_MAX 23
 
+// TODO: glibc ABI compat for this? -> __locale_data
 struct __locale_map {
 	const void *map;
 	size_t map_size;
@@ -43,5 +44,9 @@ hidden char *__gettextdomain(void);
 
 #undef MB_CUR_MAX
 #define MB_CUR_MAX (CURRENT_UTF8 ? 4 : 1)
+
+extern const unsigned short **__ctype_b_loc(void);
+extern hidden const unsigned short __ctype_b_table[];
+extern hidden const unsigned short *const __ctype_b_ptable;
 
 #endif

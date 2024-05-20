@@ -10,7 +10,18 @@
 #define free undef
 
 static int default_locale_init_done;
-static struct __locale_struct default_locale, default_ctype_locale;
+static struct __locale_struct default_locale = {
+	.cat = 0,
+	.__glibc_ctype_b = __ctype_b_table + 128, // == __ctype_b_ptable
+	.__glibc_ctype_tolower = NULL,
+	.__glibc_ctype_toupper = NULL,
+};
+static struct __locale_struct default_ctype_locale = {
+	.cat = 0,
+	.__glibc_ctype_b = __ctype_b_table + 128, // == __ctype_b_ptable
+	.__glibc_ctype_tolower = NULL,
+	.__glibc_ctype_toupper = NULL,
+};
 
 int __loc_is_allocated(locale_t loc)
 {
@@ -20,9 +31,13 @@ int __loc_is_allocated(locale_t loc)
 
 static locale_t do_newlocale(int mask, const char *name, locale_t loc)
 {
-	struct __locale_struct tmp;
+	struct __locale_struct tmp = {
+		.__glibc_ctype_b = __ctype_b_table + 128, // == __ctype_b_ptable
+		.__glibc_ctype_tolower = NULL,
+		.__glibc_ctype_toupper = NULL,
+	};
 
-	for (int i=0; i<LC_ALL; i++) {
+	for (int i=0; i<__MUSL_INTERNAL_LC_MAX; i++) {
 		tmp.cat[i] = (!(mask & (1<<i)) && loc) ? loc->cat[i] :
 			__get_locale(i, (mask & (1<<i)) ? name : "");
 		if (tmp.cat[i] == LOC_MAP_FAILED)
@@ -44,7 +59,7 @@ static locale_t do_newlocale(int mask, const char *name, locale_t loc)
 	/* And provide builtins for the initial default locale, and a
 	 * variant of the C locale honoring the default locale's encoding. */
 	if (!default_locale_init_done) {
-		for (int i=0; i<LC_ALL; i++)
+		for (int i=0; i<__MUSL_INTERNAL_LC_MAX; i++)
 			default_locale.cat[i] = __get_locale(i, "");
 		default_ctype_locale.cat[LC_CTYPE] = default_locale.cat[LC_CTYPE];
 		default_locale_init_done = 1;

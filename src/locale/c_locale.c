@@ -9,7 +9,15 @@ const struct __locale_map __c_dot_utf8 = {
 	.name = "C.UTF-8"
 };
 
-const struct __locale_struct __c_locale = { 0 };
+const struct __locale_struct __c_locale = {
+	.cat = 0,
+	.__glibc_ctype_b = __ctype_b_table + 128, // == __ctype_b_ptable
+	.__glibc_ctype_tolower = NULL,
+	.__glibc_ctype_toupper = NULL,
+};
 const struct __locale_struct __c_dot_utf8_locale = {
-	.cat[LC_CTYPE] = &__c_dot_utf8
+	.cat[LC_CTYPE] = &__c_dot_utf8,
+	.__glibc_ctype_b = __ctype_b_table + 128, // == __ctype_b_ptable
+	.__glibc_ctype_tolower = NULL,
+	.__glibc_ctype_toupper = NULL,
 };
