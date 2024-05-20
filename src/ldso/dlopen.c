@@ -7,4 +7,6 @@ static void *stub_dlopen(const char *file, int mode)
 	return 0;
 }
 
-weak_alias(stub_dlopen, dlopen);
+// we have a proper dlopen
+// TODO: support both ldso_rcrt1 and the dynamic loader
+//weak_alias(stub_dlopen, dlopen);
