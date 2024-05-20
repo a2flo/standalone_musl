@@ -54,21 +54,25 @@ unsigned long long wcstoull(const wchar_t *restrict s, wchar_t **restrict p, int
 {
 	return wcstox(s, p, base, ULLONG_MAX);
 }
+weak_alias(wcstoull, __isoc23_wcstoull);
 
 long long wcstoll(const wchar_t *restrict s, wchar_t **restrict p, int base)
 {
 	return wcstox(s, p, base, LLONG_MIN);
 }
+weak_alias(wcstoll, __isoc23_wcstoll);
 
 unsigned long wcstoul(const wchar_t *restrict s, wchar_t **restrict p, int base)
 {
 	return wcstox(s, p, base, ULONG_MAX);
 }
+weak_alias(wcstoul, __isoc23_wcstoul);
 
 long wcstol(const wchar_t *restrict s, wchar_t **restrict p, int base)
 {
 	return wcstox(s, p, base, 0UL+LONG_MIN);
 }
+weak_alias(wcstol, __isoc23_wcstol);
 
 intmax_t wcstoimax(const wchar_t *restrict s, wchar_t **restrict p, int base)
 {

@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "internal.h"
 
 size_t mbsrtowcs(wchar_t *restrict ws, const char **restrict src, size_t wn, mbstate_t *restrict st)
@@ -117,4 +118,10 @@ resume:
 	errno = EILSEQ;
 	if (ws) *src = (const void *)s;
 	return -1;
+}
+
+size_t __mbsrtowcs_chk(wchar_t *restrict ws, const char **restrict src, size_t wn, mbstate_t *restrict st,
+					   size_t dstlen) {
+	assert(dstlen >= wn);
+	return mbsrtowcs(ws, src, wn, st);
 }

@@ -36,3 +36,9 @@ int epoll_wait(int fd, struct epoll_event *ev, int cnt, int to)
 {
 	return epoll_pwait(fd, ev, cnt, to, 0);
 }
+
+// for glibc compat
+int epoll_pwait2(int fd, struct epoll_event *ev, int cnt, const struct timespec *to, const sigset_t *sigs)
+{
+	return __syscall_cp(SYS_epoll_pwait2, fd, ev, cnt, to, sigs, _NSIG/8);
+}

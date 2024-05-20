@@ -7,6 +7,7 @@
 #include <stdlib.h> /* calloc */
 #include <dlfcn.h>  /* dlsym */
 #include <string.h> /* strcmp */
+#include <sys/syscall.h>
 
 #include "alias.h" /* alias */
 
@@ -144,6 +145,14 @@ ssize_t __readlink_chk(const char *path, char *buf, size_t len, size_t buflen)
 	return readlink(path, buf, len);
 }
 
+ssize_t __readlinkat_chk(int fd, const char *path, char *buf, size_t len, size_t buflen)
+{
+	assert(buf != NULL);
+	assert(buflen >= len);
+	
+	return readlinkat(fd, path, buf, len);
+}
+
 /**
  * Get configurable system variables.
  *
@@ -187,4 +196,9 @@ int group_member(gid_t gid)
 int __close(int fd)
 {
 	return close(fd);
+}
+
+// just forward to syscall
+int close_range(unsigned int first, unsigned int last, int flags) {
+	return syscall(SYS_close_range, first, last, flags);
 }

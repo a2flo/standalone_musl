@@ -12,3 +12,4 @@ int scanf(const char *restrict fmt, ...)
 }
 
 weak_alias(scanf,__isoc99_scanf);
+weak_alias(scanf,__isoc23_scanf);

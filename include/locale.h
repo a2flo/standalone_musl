@@ -22,6 +22,15 @@ extern "C" {
 #define LC_MONETARY 4
 #define LC_MESSAGES 5
 #define LC_ALL      6
+// the following LC_* types are provided for glibc compat
+// NOTE: these are however non-functional and are for ABI compat only
+#define GLIBC_LC_PAPER 7
+#define GLIBC_LC_NAME 8
+#define GLIBC_LC_ADDRESS  9
+#define GLIBC_LC_TELEPHONE 10
+#define GLIBC_LC_MEASUREMENT 11
+#define GLIBC_LC_IDENTIFICATION 12
+#define __MUSL_INTERNAL_LC_MAX 13
 
 struct lconv {
 	char *decimal_point;

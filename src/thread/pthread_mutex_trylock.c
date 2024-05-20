@@ -16,7 +16,7 @@ int __pthread_mutex_trylock_owner(pthread_mutex_t *m)
 			goto success;
 		}
 		if ((type&3) == PTHREAD_MUTEX_RECURSIVE) {
-			if ((unsigned)m->_m_count >= INT_MAX) return EAGAIN;
+			if ((unsigned)m->_m_count >= SHRT_MAX) return EAGAIN;
 			m->_m_count++;
 			return 0;
 		}

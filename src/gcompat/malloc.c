@@ -43,6 +43,18 @@ struct mallinfo {
 	int fordblks; /* Total free space (bytes) */
 	int keepcost; /* Top-most, releasable space (bytes) */
 };
+struct mallinfo2 {
+	size_t arena;    /* Non-mmapped space allocated (bytes) */
+	size_t ordblks;  /* Number of free chunks */
+	size_t smblks;   /* Number of free fastbin blocks */
+	size_t hblks;    /* Number of mmapped regions */
+	size_t hblkhd;   /* Space allocated in mmapped regions (bytes) */
+	size_t usmblks;  /* Maximum total allocated space (bytes) */
+	size_t fsmblks;  /* Space in freed fastbin blocks (bytes) */
+	size_t uordblks; /* Total allocated space (bytes) */
+	size_t fordblks; /* Total free space (bytes) */
+	size_t keepcost; /* Top-most, releasable space (bytes) */
+};
 
 void *__libc_memalign(size_t align, size_t len)
 {
@@ -65,6 +77,13 @@ struct mallinfo mallinfo(void)
 	return info;
 }
 
+struct mallinfo2 mallinfo2(void)
+{
+	struct mallinfo2 info;
+	memset(&info, 0, sizeof(info));
+	return info;
+}
+
 int malloc_trim(size_t pad)
 {
 	/* This concept doesn't really map to musl's malloc */
@@ -82,3 +101,11 @@ void muntrace(void)
 	/* Not implemented on purpose. */
 	return;
 }
+
+// dummy malloc hooks
+void *(*volatile __malloc_hook)(size_t size, const void *caller) = NULL;
+void *(*volatile __realloc_hook)(void *ptr, size_t size, const void *caller) = NULL;
+void *(*volatile __memalign_hook)(size_t alignment, size_t size, const void *caller) = NULL;
+void (*volatile __free_hook)(void *ptr, const void *caller) = NULL;
+void (*__malloc_initialize_hook)(void) = NULL;
+void (*volatile __after_morecore_hook)(void) = NULL;
