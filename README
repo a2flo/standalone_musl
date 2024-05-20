@@ -1,3 +1,70 @@
+This repository implements a musl libc fork that provides enhanced glibc
+compatibility and facilitates the creation of "semi-static" binaries.
+This is currently based on musl v1.2.5 (@0784374d56).
+
+
+Goals:
+ * Enable the creation of "semi-static" binaries, i.e. statically linked
+   binaries that integrate the dynamic loader, allowing the use of
+   dlopen(), dlsym(), etc. for use cases that require this.
+   E.g. loading graphics drivers for Vulkan, CUDA, OpenXR, etc. support.
+ * Provide ABI and API compatibility with glibc, as far as necessary to
+   support the first goal.
+ * Dynamic replacement of system library loads by statically linking our
+   own libraries and providing their symbols.
+   E.g. dynamically replacing the load of libgcc_s.so by integrating and
+   providing LLVM's libunwind, libcxxabi and compiler-rt.
+
+
+Non-Goals:
+ * Upstreaming: since all of these changes are very invasive and in many
+   ways contrary to what musl is doing, upstreaming any of this is very
+   much out of the question and generally pointless.
+   Note that I will try to keep of with musl development and rebase on
+   top of future release versions.
+
+
+Limitations and other info:
+ * GNU indirect function support ("ifunc") is not fully supported. There
+   is some very limited support, but this should generally be avoided.
+   System libraries that make use of this can be replaced (see goal #3).
+ * Building dynamic binaries is currently broken.
+ * semi-static binaries must link these in the specified order:
+   ldso_rcrt1.o crti.o <other-user-objects> crtn.o
+ * semi-static binaries must use the entry point _dlstart.
+   Linker option: -e _dlstart
+ * semi-static binaries must link with -lc_ldso
+ * semi-static binaries must use --whole-archive linking for making
+   integrated libraries and their symbols available to dynamically
+   loaded libraries.
+   Specifically, this needs whole archive linking for:
+   -lc, -lc_ldso and the clang/compiler-rt libclang_rt.builtins.a
+   Additionally, for C++: -lc++ -lc++abi -lunwind
+
+
+Status:
+ * When integrating additional system libraries, this is currently able
+   to load and actually make use of NVIDIA drivers for CUDA and Vulkan,
+   AMD AMDVLK drivers for use with Vulkan, and Mesa RADV drivers for
+   use with Vulkan.
+   Other drivers may also work, but these are the ones I've currently
+   tested. PRs to make other drivers work are welcome :)
+
+
+On top of musl, this repository also integrates the following libraries
+to enhance and provide additional glibc compatibility:
+  * libgcompat (v1.1.0): https://git.adelielinux.org/adelie/gcompat
+  * libucontext (@be80075e95): https://github.com/kaniini/libucontext
+  * libbsd (v0.12.2): https://libbsd.freedesktop.org/wiki
+    (arc4random support only)
+Please check the respective sub-folders for additional licensing terms.
+
+
+NOTE: A full toolchain integrating this will be released soon(tm).
+
+------------------------------------------------------------------------
+Original README
+------------------------------------------------------------------------
 
     musl libc
 
