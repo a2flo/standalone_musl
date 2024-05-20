@@ -64,7 +64,7 @@ ALL_INCLUDES = $(sort $(INCLUDES:$(srcdir)/%=%) $(GENH:obj/%=%) $(ARCH_INCLUDES:
 EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 CRT_LIBS = $(addprefix lib/,$(notdir $(CRT_OBJS)))
-STATIC_LIBS = lib/libc.a
+STATIC_LIBS = lib/libc.a lib/libc_ldso.a
 SHARED_LIBS = lib/libc.so
 TOOL_LIBS = lib/musl-gcc.specs
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
@@ -107,13 +107,13 @@ obj/src/internal/version.h: $(wildcard $(srcdir)/VERSION $(srcdir)/.git)
 
 obj/src/internal/version.o obj/src/internal/version.lo: obj/src/internal/version.h
 
-obj/crt/rcrt1.o obj/ldso/dlstart.lo obj/ldso/dynlink.lo: $(srcdir)/src/internal/dynlink.h $(srcdir)/arch/$(ARCH)/reloc.h
+obj/crt/ldso_rcrt1.o obj/crt/rcrt1.o obj/ldso/dlstart.lo obj/ldso/dynlink.lo: $(srcdir)/src/internal/dynlink.h $(srcdir)/arch/$(ARCH)/reloc.h
 
-obj/crt/crt1.o obj/crt/scrt1.o obj/crt/rcrt1.o obj/ldso/dlstart.lo: $(srcdir)/arch/$(ARCH)/crt_arch.h
+obj/crt/ldso_rcrt1.o obj/crt/crt1.o obj/crt/scrt1.o obj/crt/rcrt1.o obj/ldso/dlstart.lo: $(srcdir)/arch/$(ARCH)/crt_arch.h
 
-obj/crt/rcrt1.o: $(srcdir)/ldso/dlstart.c
+obj/crt/ldso_rcrt1.o obj/crt/rcrt1.o: $(srcdir)/ldso/dlstart.c
 
-obj/crt/Scrt1.o obj/crt/rcrt1.o: CFLAGS_ALL += -fPIC
+obj/crt/ldso_rcrt1.o obj/crt/Scrt1.o obj/crt/rcrt1.o: CFLAGS_ALL += -fPIC
 
 OPTIMIZE_SRCS = $(wildcard $(OPTIMIZE_GLOBS:%=$(srcdir)/src/%))
 $(OPTIMIZE_SRCS:$(srcdir)/%.c=obj/%.o) $(OPTIMIZE_SRCS:$(srcdir)/%.c=obj/%.lo): CFLAGS += -O3
@@ -174,6 +174,11 @@ lib/libc.so: $(LOBJS) $(LDSO_OBJS)
 lib/libc.a: $(AOBJS)
 	rm -f $@
 	$(AR) rc $@ $(AOBJS)
+	$(RANLIB) $@
+
+lib/libc_ldso.a: $(LDSO_OBJS)
+	rm -f $@
+	$(AR) rc $@ $(LDSO_OBJS)
 	$(RANLIB) $@
 
 $(EMPTY_LIBS):

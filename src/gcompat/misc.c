@@ -35,3 +35,10 @@ unsigned int gnu_dev_minor(dev_t dev)
 void *__libc_stack_end = NULL;
 
 char __libc_single_threaded = 0;
+
+struct dl_find_object;
+int _dl_find_object(void *address, struct dl_find_object *result) {
+	(void)address;
+	(void)result;
+	return -1;
+}
