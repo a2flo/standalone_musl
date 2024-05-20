@@ -135,6 +135,9 @@ $(GCOMPAT_OBJS): CFLAGS_ALL += -D_BSD_SOURCE
 BSD_OBJS = $(filter obj/src/bsd/%,$(ALL_OBJS:%.o=%.lo))
 $(BSD_OBJS): CFLAGS_ALL += -D_BSD_SOURCE
 
+UCONTEXT_ASM_OBJS = $(filter obj/src/ucontext/$(ARCH)/%,$(ALL_OBJS:%.o=%.lo))
+UCONTEXT_ASM_OBJS: CFLAGS_ALL += -Wa,--noexecstack
+
 $(LOBJS) $(LDSO_OBJS): CFLAGS_ALL += -fPIC
 
 CC_CMD = $(CC) $(CFLAGS_ALL) -c -o $@ $<

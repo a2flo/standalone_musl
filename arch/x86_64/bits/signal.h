@@ -101,6 +101,7 @@ typedef struct __ucontext {
 	mcontext_t uc_mcontext;
 	sigset_t uc_sigmask;
 	unsigned long __fpregs_mem[64];
+	unsigned long __ssp[4]; // for glibc compat
 } ucontext_t;
 
 #define SA_NOCLDSTOP  1
