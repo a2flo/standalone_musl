@@ -144,3 +144,10 @@ __float128 strtof128(const char *nptr, char **endptr) {
 	abort();
 	return (__float128)0.0;
 }
+
+size_t __mbstowcs_chk(wchar_t *restrict ws, const char *restrict s, size_t wn, size_t destlen) {
+	assert(ws != NULL);
+	assert(s != NULL);
+	assert(destlen >= wn);
+	return mbstowcs(ws, s, wn);
+}

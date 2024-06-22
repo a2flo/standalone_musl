@@ -2,6 +2,8 @@
 #include <stdarg.h> /* va_list, va_start, va_end */
 #include <stddef.h> /* size_t */
 #include <wchar.h>  /* wchar_t, *wprintf, mbstate_t */
+#include <stdlib.h>
+#include <string.h>
 
 int __vswprintf_chk(wchar_t *s, size_t n, int flag, size_t slen,
                     const wchar_t *format, va_list ap);
@@ -139,4 +141,28 @@ double wcstod_l(const wchar_t *nptr, wchar_t **endptr, locale_t loc)
 
 size_t __mbrlen(const char *restrict s, size_t n, mbstate_t *restrict st) {
     return mbrlen(s, n, st);
+}
+
+wchar_t *__wcsncpy_chk(wchar_t *restrict d, const wchar_t *restrict s, size_t n, size_t destlen)
+{
+	assert(d != NULL);
+	assert(s != NULL);
+	assert(destlen >= n);
+	if (d < s) {
+		assert(d + n <= s);
+	} else {
+		assert(s + n <= d);
+	}
+	
+	return wcsncpy(d, s, n);
+}
+
+size_t __wcrtomb_chk(char *restrict s, wchar_t wc, mbstate_t *restrict st, size_t destlen) {
+	size_t srclen;
+	
+	assert(s != NULL);
+	assert(destlen >= MB_CUR_MAX);
+	srclen = strlen(s) + 1;
+	assert(destlen >= srclen);
+	return wcrtomb(s, wc, st);
 }
