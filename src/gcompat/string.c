@@ -195,6 +195,20 @@ char *__strcpy_chk(char *dest, const char *src, size_t destlen)
 	return strcpy(dest, src);
 }
 
+size_t __strlcpy_chk(char *dest, const char *src, size_t n, size_t destlen)
+{
+	assert(dest != NULL);
+	assert(src != NULL);
+	assert(destlen >= n);
+	if (dest < src) {
+		assert(dest + n <= src);
+	} else {
+		assert(src + n <= dest);
+	}
+	
+	return strlcpy(dest, src, n);
+}
+
 /**
  * Find the substring length of a string that does not have any two characters.
  *
