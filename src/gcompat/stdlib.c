@@ -140,9 +140,7 @@ int strfromf128(char *dst, size_t size, const char *format, __float128 value) {
 __float128 strtof128(const char *nptr, char **endptr) {
 	(void)nptr;
 	(void)endptr;
-	fprintf(stderr, "strtof128 not implemented\n");
-	abort();
-	return (__float128)0.0;
+	abort_with_reason("strtof128 unimplemented");
 }
 
 size_t __mbstowcs_chk(wchar_t *restrict ws, const char *restrict s, size_t wn, size_t destlen) {

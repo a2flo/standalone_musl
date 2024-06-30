@@ -258,6 +258,5 @@ size_t parse_printf_format(const char *template, size_t n, int *argtypes) {
 	(void)template;
 	(void)n;
 	(void)argtypes;
-	fprintf(stderr, "parse_printf_format() is unsupported\n");
-	abort();
+	abort_with_reason("parse_printf_format unimplemented");
 }

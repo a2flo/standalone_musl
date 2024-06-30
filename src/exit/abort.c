@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <signal.h>
+#include <stdio.h>
 #include "syscall.h"
 #include "pthread_impl.h"
 #include "atomic.h"
@@ -27,4 +28,10 @@ _Noreturn void abort(void)
 	a_crash();
 	raise(SIGKILL);
 	_Exit(127);
+}
+
+_Noreturn void abort_with_reason(const char *__restrict reason) {
+	puts(reason);
+	fflush(stdout);
+	abort();
 }
