@@ -44,6 +44,7 @@ void free (void *);
 void *aligned_alloc(size_t, size_t);
 
 _Noreturn void abort (void);
+_Noreturn void abort_with_reason (const char *__restrict);
 int atexit (void (*) (void));
 _Noreturn void exit (int);
 _Noreturn void _Exit (int);
