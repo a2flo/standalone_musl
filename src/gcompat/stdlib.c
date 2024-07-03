@@ -129,6 +129,7 @@ unsigned long long strtouq(const char *nptr, char **endptr, int base)
 	return strtoull(nptr, endptr, base);
 }
 
+#if defined(__x86_64__)
 // stubs for f128
 int strfromf128(char *dst, size_t size, const char *format, __float128 value) {
 	(void)dst;
@@ -142,6 +143,7 @@ __float128 strtof128(const char *nptr, char **endptr) {
 	(void)endptr;
 	abort_with_reason("strtof128 unimplemented");
 }
+#endif
 
 size_t __mbstowcs_chk(wchar_t *restrict ws, const char *restrict s, size_t wn, size_t destlen) {
 	assert(ws != NULL);
