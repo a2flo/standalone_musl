@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 #if defined(__aarch64__)
-#include "aach64/defs.h"
+#include "aarch64/defs.h"
 #elif defined(__x86_64__)
 #include "x86_64/defs.h"
 #else
