@@ -131,6 +131,13 @@ static struct builtin_tls {
 	void *space[16];
 } builtin_tls[1];
 #define MIN_TLS_ALIGN offsetof(struct builtin_tls, pt)
+/* To support initial-exec TLS for dynamically loaded libraries via
+ * dlopen(), we pre-allocate some TLS entries of a static size,
+ * then try to use them for dynamic TLS entries at run-time.
+ * Note that the size-per-entry is based on empiric testing of some
+ * system libraries that use TLS + some margin. */
+#define TLS_STATIC_RESERVE_COUNT 16u
+#define TLS_STATIC_RESERVE_SIZE_PER_ENTRY 256u
 
 #define ADDEND_LIMIT 4096
 static size_t *saved_addends, *apply_addends_to;
@@ -150,6 +157,7 @@ static struct debug debug;
 static struct tls_module *tls_tail;
 static size_t tls_cnt, tls_offset, tls_align = MIN_TLS_ALIGN;
 static size_t static_tls_cnt;
+static size_t static_tls_size;
 static pthread_mutex_t init_fini_lock;
 static pthread_cond_t ctor_cond;
 static struct dso *builtin_deps[2];
@@ -456,15 +464,12 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
 		tls_val = def.sym ? def.sym->st_value : 0;
 
 		if ((type == REL_TPOFF || type == REL_TPOFF_NEG)
-		    && def.dso->tls_id > static_tls_cnt) {
-			// allow this for libnvidia-tls.so ...
-			if (!def.dso->name || strncmp(def.dso->name, "/lib/libnvidia-tls.so.", 22) != 0) {
-				__builtin_debugtrap();
-				error("Error relocating %s: %s: initial-exec TLS "
-					  "resolves to dynamic definition in %s",
-					  dso->name, name, def.dso->name);
-				longjmp(*rtld_fail, 1);
-			}
+			&& def.dso->tls_id > static_tls_cnt) {
+			__builtin_debugtrap();
+			error("Error relocating %s: %s: initial-exec TLS "
+				  "resolves to dynamic definition in %s",
+				  dso->name, name, def.dso->name);
+			longjmp(*rtld_fail, 1);
 		}
 
 		switch(type) {
@@ -1260,6 +1265,12 @@ static struct dso *load_library(const char *name, struct dso *needed_by)
 		if (tls_tail) tls_tail->next = &p->tls;
 		else libc.tls_head = &p->tls;
 		tls_tail = &p->tls;
+
+		if (p->tls_id < static_tls_cnt && tls_offset > static_tls_size) {
+			error("pre-allocated static TLS size is too small: have %zu, need %zu, while loading %s",
+				  static_tls_size, tls_offset, p->name);
+			a_crash();
+		}
 	}
 
 	tail->next = p;
@@ -2041,6 +2052,10 @@ void __dls3(size_t *sp, size_t *auxv)
 	 * might result in calloc being a call to application code. */
 	update_tls_size();
 	void *initial_tls = builtin_tls;
+#if TLS_STATIC_RESERVE_COUNT > 0
+	libc.tls_size += TLS_STATIC_RESERVE_COUNT * TLS_STATIC_RESERVE_SIZE_PER_ENTRY;
+#endif
+	static_tls_size = libc.tls_size;
 	if (libc.tls_size > sizeof builtin_tls || tls_align > MIN_TLS_ALIGN) {
 		initial_tls = calloc(libc.tls_size, 1);
 		if (!initial_tls) {
@@ -2050,6 +2065,9 @@ void __dls3(size_t *sp, size_t *auxv)
 		}
 	}
 	static_tls_cnt = tls_cnt;
+#if TLS_STATIC_RESERVE_COUNT > 0
+	static_tls_cnt += TLS_STATIC_RESERVE_COUNT;
+#endif
 
 	/* The main program must be relocated LAST since it may contain
 	 * copy relocations which depend on libraries' relocations. */
