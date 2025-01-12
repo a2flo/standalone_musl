@@ -7,3 +7,9 @@ int __sem_timedwait_time32(sem_t *sem, const struct timespec32 *restrict ts32)
 	return sem_timedwait(sem, !ts32 ? 0 : (&(struct timespec){
 		.tv_sec = ts32->tv_sec, .tv_nsec = ts32->tv_nsec}));
 }
+
+int __sem_clockwait_time32(sem_t *sem, clockid_t clk, const struct timespec32 *restrict ts32)
+{
+	return sem_clockwait(sem, clk, !ts32 ? 0 : (&(struct timespec){
+		.tv_sec = ts32->tv_sec, .tv_nsec = ts32->tv_nsec}));
+}

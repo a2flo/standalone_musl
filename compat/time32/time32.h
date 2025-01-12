@@ -67,6 +67,7 @@ int __pthread_timedjoin_np_time32() __asm__("pthread_timedjoin_np");
 int __recvmmsg_time32() __asm__("recvmmsg");
 int __sched_rr_get_interval_time32() __asm__("sched_rr_get_interval");
 int __select_time32() __asm__("select");
+int __sem_clockwait_time32() __asm__("sem_clockwait");
 int __sem_timedwait_time32() __asm__("sem_timedwait");
 int __semtimedop_time32() __asm__("semtimedop");
 int __setitimer_time32() __asm__("setitimer");
