@@ -240,6 +240,13 @@ char *tmpnam_r(char *s)
 	return tmpnam(s);
 }
 
+int __vdprintf_chk (int d, int flags, const char *format, va_list ap)
+{
+	assert(format != NULL);
+
+	return vdprintf(d, format, ap);
+}
+
 int
 __dprintf_chk (int d, int flags, const char *format, ...)
 {
@@ -247,7 +254,7 @@ __dprintf_chk (int d, int flags, const char *format, ...)
 	int done;
 
 	va_start(arg, format);
-	done = vdprintf(d, format, arg);
+	done = __vdprintf_chk(d, flags, format, arg);
 	va_end(arg);
 
 	return done;

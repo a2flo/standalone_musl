@@ -23,6 +23,13 @@ char *__realpath_chk(const char *path, char *resolved_path, size_t resolved_len)
 }
 
 /**
+ * Return the canonicalized absolute pathname
+ */
+char *canonicalize_file_name(const char *path) {
+	return realpath(path, NULL);
+}
+
+/**
  * Get an environment variable.
  */
 char *__secure_getenv(const char *name)

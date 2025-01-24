@@ -53,7 +53,7 @@ Status:
 
 On top of musl, this repository also integrates the following libraries
 to enhance and provide additional glibc compatibility:
-  * libgcompat (v1.1.0): https://git.adelielinux.org/adelie/gcompat
+  * libgcompat (@7f2d3d5a82): https://git.adelielinux.org/adelie/gcompat
   * libucontext (@be80075e95): https://github.com/kaniini/libucontext
   * libbsd (v0.12.2): https://libbsd.freedesktop.org/wiki
     (arc4random support only)

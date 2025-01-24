@@ -2424,11 +2424,16 @@ int dladdr(const void *addr_arg, Dl_info *info)
 	return 1;
 }
 
-// for glibc compat
+// for glibc compat (via gcompat)
 int dladdr1(const void *addr_arg, Dl_info *info, void **extra_info, int flags) {
 	(void)extra_info;
-	(void)flags;
-	return dladdr(addr_arg, info);
+	switch (flags) {
+	case 1 /* RTLD_DL_SYMEMT */:
+	case 2 /* RTLD_DL_LINKMAP */:
+		return 0;
+	default:
+		return dladdr(addr_arg, info);
+	}
 }
 
 hidden void *__dlsym(void *restrict p, const char *restrict s, void *restrict ra)
