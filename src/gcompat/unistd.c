@@ -4,6 +4,7 @@
 #include <stddef.h> /* NULL, size_t */
 #include <unistd.h> /* confstr, getcwd, getgroups, ... */
 #include <errno.h>  /* ENOSYS, ENOMEM */
+#include <stdarg.h> /* va_list, va_start, va_end */
 #include <stdlib.h> /* calloc */
 #include <dlfcn.h>  /* dlsym */
 #include <string.h> /* strcmp */
@@ -196,6 +197,17 @@ int group_member(gid_t gid)
 int __close(int fd)
 {
 	return close(fd);
+}
+
+int fcntl64(int fd, int cmd, ...) {
+	int ret;
+	va_list va;
+
+	va_start(va, cmd);
+	ret = fcntl(fd, cmd, va);
+	va_end(va);
+
+	return ret;
 }
 
 // just forward to syscall

@@ -246,7 +246,7 @@ char *__strncat_chk(char *dest, const char *src, size_t n, size_t destlen)
 
 	assert(dest != NULL);
 	assert(src != NULL);
-	total = strnlen(dest, destlen) + n + 1;
+	total = strnlen(dest, destlen) + strnlen(src, destlen) + 1;
 	assert(destlen >= total);
 	if (dest < src) {
 		assert(dest + total <= src);
