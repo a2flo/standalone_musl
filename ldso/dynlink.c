@@ -371,7 +371,7 @@ static struct symdef get_lfs64(const char *name)
 		"posix_fallocate\0pread\0preadv\0prlimit\0pwrite\0"
 		"pwritev\0readdir\0scandir\0sendfile\0setrlimit\0"
 		"stat\0statfs\0statvfs\0tmpfile\0truncate\0versionsort\0"
-		"__fxstat\0__fxstatat\0__lxstat\0__xstat\0";
+		"__fxstat\0__fxstatat\0__lxstat\0__xstat\0fcntl\0";
 	if (!strcmp(name, "readdir64_r"))
 		return find_sym(&ldso, "readdir_r", 1);
 	size_t l = strnlen(name, 18);
@@ -2424,16 +2424,11 @@ int dladdr(const void *addr_arg, Dl_info *info)
 	return 1;
 }
 
-// for glibc compat (via gcompat)
+// for glibc compat
 int dladdr1(const void *addr_arg, Dl_info *info, void **extra_info, int flags) {
 	(void)extra_info;
-	switch (flags) {
-	case 1 /* RTLD_DL_SYMEMT */:
-	case 2 /* RTLD_DL_LINKMAP */:
-		return 0;
-	default:
-		return dladdr(addr_arg, info);
-	}
+	(void)flags;
+	return dladdr(addr_arg, info);
 }
 
 hidden void *__dlsym(void *restrict p, const char *restrict s, void *restrict ra)
