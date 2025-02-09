@@ -339,6 +339,8 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
 			} else if (d-159 <= 252-159) {
 				c++;
 				d -= 159;
+			} else {
+				goto ilseq;
 			}
 			c = jis0208[c][d];
 			if (!c) goto ilseq;
