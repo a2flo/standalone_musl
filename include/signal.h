@@ -168,15 +168,15 @@ typedef struct {
 
 struct sigaction {
 	union {
-		void (*sa_handler)(int);
-		void (*sa_sigaction)(int, siginfo_t *, void *);
+		void (*__sa_handler)(int);
+		void (*__sa_sigaction)(int, siginfo_t *, void *);
 	} __sa_handler;
 	sigset_t sa_mask;
 	int sa_flags;
 	void (*sa_restorer)(void);
 };
-#define sa_handler   __sa_handler.sa_handler
-#define sa_sigaction __sa_handler.sa_sigaction
+#define sa_handler   __sa_handler.__sa_handler
+#define sa_sigaction __sa_handler.__sa_sigaction
 
 #define SA_UNSUPPORTED 0x00000400
 #define SA_EXPOSE_TAGBITS 0x00000800
