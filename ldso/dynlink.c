@@ -137,7 +137,7 @@ static struct builtin_tls {
  * Note that the size-per-entry is based on empiric testing of some
  * system libraries that use TLS + some margin. */
 #define TLS_STATIC_RESERVE_COUNT 16u
-#define TLS_STATIC_RESERVE_SIZE_PER_ENTRY 256u
+#define TLS_STATIC_RESERVE_SIZE_PER_ENTRY 512u
 
 #define ADDEND_LIMIT 4096
 static size_t *saved_addends, *apply_addends_to;
