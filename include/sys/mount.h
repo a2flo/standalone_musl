@@ -67,6 +67,7 @@ extern "C" {
 int mount(const char *, const char *, const char *, unsigned long, const void *);
 int umount(const char *);
 int umount2(const char *, int);
+int open_tree(int, const char *, unsigned int);
 
 #ifdef __cplusplus
 }
