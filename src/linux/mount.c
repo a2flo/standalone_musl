@@ -15,3 +15,12 @@ int umount2(const char *special, int flags)
 {
 	return syscall(SYS_umount2, special, flags);
 }
+
+#if !defined(SYS_open_tree)
+#define SYS_open_tree __NR_open_tree
+#endif
+
+int open_tree(int dirfd, const char *path, unsigned int flags)
+{
+	return syscall(SYS_open_tree, dirfd, path, flags);
+}
