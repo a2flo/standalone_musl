@@ -40,6 +40,8 @@ Limitations and other info:
    Specifically, this needs whole archive linking for:
    -lc, -lc_ldso and the clang/compiler-rt libclang_rt.builtins.a
    Additionally, for C++: -lc++ -lc++abi -lunwind
+ * This has only be tested on x86-64 and AArch64. Other platforms may work,
+   but are not officially supported by this repository.
 
 
 Status:
