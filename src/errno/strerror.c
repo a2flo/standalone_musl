@@ -27,6 +27,22 @@ static const unsigned short errmsgidx[] = {
 #undef E
 };
 
+static const struct errcodestr_t {
+#define E(n, s) char str##n[sizeof(#n)];
+#include "__strerror.h"
+#undef E
+} errcodestr = {
+#define E(n, s) #n,
+#include "__strerror.h"
+#undef E
+};
+
+static const unsigned short errcodeidx[] = {
+#define E(n, s) [n] = offsetof(struct errcodestr_t, str##n),
+#include "__strerror.h"
+#undef E
+};
+
 char *__strerror_l(int e, locale_t loc)
 {
 	const char *s;
@@ -42,6 +58,24 @@ char *__strerror_l(int e, locale_t loc)
 char *strerror(int e)
 {
 	return __strerror_l(e, CURRENT_LOCALE);
+}
+
+const char *strerrordesc_np(int e) {
+#ifdef EDQUOT_ORIG
+	if (e==EDQUOT) e=0;
+	else if (e==EDQUOT_ORIG) e=EDQUOT;
+#endif
+	if (e >= sizeof errmsgidx / sizeof *errmsgidx) e = 0;
+	return &errmsgstr + errmsgidx[e];
+}
+
+const char *strerrorname_np(int e) {
+#ifdef EDQUOT_ORIG
+	if (e==EDQUOT) e=0;
+	else if (e==EDQUOT_ORIG) e=EDQUOT;
+#endif
+	if (e >= sizeof errcodeidx / sizeof *errcodeidx) e = 0;
+	return &errcodestr + errcodeidx[e];
 }
 
 weak_alias(__strerror_l, strerror_l);

@@ -74,6 +74,8 @@ char *strerror_l (int, locale_t);
 int strcoll_l (const char *, const char *, locale_t);
 size_t strxfrm_l (char *__restrict, const char *__restrict, size_t, locale_t);
 void *memmem(const void *, size_t, const void *, size_t);
+const char *strerrorname_np(int);
+const char *strerrordesc_np(int);
 #endif
 
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
