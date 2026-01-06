@@ -23,4 +23,9 @@ int res_query(const char *name, int class, int type, unsigned char *dest, int le
 	return r;
 }
 
+int res_nquery(const char *name, res_state, int class, int type, unsigned char *dest, int len)
+{
+	return res_query(name, class, type, dest, len);
+}
+
 weak_alias(res_query, res_search);
