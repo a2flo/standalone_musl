@@ -48,6 +48,26 @@ uintmax_t strtoumax(const char *restrict s, char **restrict p, int base)
 	return strtoull(s, p, base);
 }
 
+unsigned long long __isoc23_strtoull_l(const char *restrict s, char **restrict p, int base, locale_t)
+{
+	return strtoull(s, p, base);
+}
+
+long long __isoc23_strtoll_l(const char *restrict s, char **restrict p, int base, locale_t)
+{
+	return strtoll(s, p, base);
+}
+
+unsigned long __isoc23_strtoul_l(const char *restrict s, char **restrict p, int base, locale_t)
+{
+	return strtoul(s, p, base);
+}
+
+long __isoc23_strtol_l(const char *restrict s, char **restrict p, int base, locale_t)
+{
+	return strtol(s, p, base);
+}
+
 weak_alias(strtol, __strtol_internal);
 weak_alias(strtol, __isoc23_strtol);
 weak_alias(strtoul, __strtoul_internal);
@@ -58,3 +78,5 @@ weak_alias(strtoull, __strtoull_internal);
 weak_alias(strtoull, __isoc23_strtoull);
 weak_alias(strtoimax, __strtoimax_internal);
 weak_alias(strtoumax, __strtoumax_internal);
+weak_alias(strtoimax, __isoc23_strtoimax);
+weak_alias(strtoumax, __isoc23_strtoumax);

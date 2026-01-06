@@ -4,6 +4,7 @@
 #include <pthread.h> /* pthread_atfork */
 #include <sched.h>   /* sched_yield, CPU_ALLOC, CPU_FREE */
 #include <unistd.h>  /* open, read */
+#include "pthread_impl.h"
 
 #include "alias.h" /* weak_alias */
 
@@ -74,4 +75,9 @@ int pthread_mutexattr_setkind_np(pthread_mutexattr_t *attr, int kind)
 		return EINVAL;
 
 	return pthread_mutexattr_settype(attr, kind);
+}
+
+int __pthread_get_minstack(const pthread_attr_t *restrict)
+{
+	return DEFAULT_STACK_SIZE;
 }

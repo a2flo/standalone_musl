@@ -17,7 +17,6 @@ int openat(int fd, const char *filename, int flags, ...)
 	return syscall_cp(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
 }
 
-struct open_how;
 int openat2(int dirfd, const char *pathname, struct open_how *how, size_t size)
 {
 	return syscall_cp(SYS_openat2, dirfd, pathname, how, size);

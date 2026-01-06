@@ -4,12 +4,13 @@
 #include <stdint.h>
 #include <errno.h>
 #include <stddef.h>
+#include <fcntl.h>
+#include <unistd.h>
 
-int scandir(const char *path, struct dirent ***res,
+int scandir_impl(DIR *d, struct dirent ***res,
 	int (*sel)(const struct dirent *),
 	int (*cmp)(const struct dirent **, const struct dirent **))
 {
-	DIR *d = opendir(path);
 	struct dirent *de, **names=0, **tmp;
 	size_t cnt=0, len=0;
 	int old_errno = errno;
@@ -43,3 +44,45 @@ int scandir(const char *path, struct dirent ***res,
 	*res = names;
 	return cnt;
 }
+
+int scandir(const char *path, struct dirent ***res,
+	int (*sel)(const struct dirent *),
+	int (*cmp)(const struct dirent **, const struct dirent **))
+{
+	DIR *d = opendir(path);
+	return scandir_impl(d, res, sel, cmp);
+}
+
+int scandirat(int dirfd, const char *path, struct dirent ***res,
+	int (*sel)(const struct dirent *),
+	int (*cmp)(const struct dirent **, const struct dirent **))
+{
+	if (!path)
+	{
+		errno = ENOTDIR;
+		return -1;
+	}
+
+	if (path[0] == '/' || dirfd == AT_FDCWD)
+	{
+		return scandir(path, res, sel, cmp);
+	}
+
+	// NOTE/TODO: probably not fully correct (especially errno handling), but good enough?
+	int dfd = openat(dirfd, path, O_RDONLY|O_DIRECTORY|O_CLOEXEC);
+	if (dfd == -1)
+	{
+		errno = ENOTDIR;
+		return -1;
+	}
+	DIR *d = fdopendir(dfd);
+	if (!d)
+	{
+		close(dfd);
+		errno = ENOTDIR;
+		return -1;
+	}
+	return scandir_impl(d, res, sel, cmp);
+}
+
+weak_alias(scandirat, scandirat64);

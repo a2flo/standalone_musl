@@ -10,9 +10,9 @@ extern "C" {
 #define __NEED_off_t
 #define __NEED_pid_t
 #define __NEED_mode_t
+#define __NEED_size_t
 
 #ifdef _GNU_SOURCE
-#define __NEED_size_t
 #define __NEED_ssize_t
 #define __NEED_struct_iovec
 #endif
@@ -20,6 +20,7 @@ extern "C" {
 #include <bits/alltypes.h>
 
 #include <bits/fcntl.h>
+#include <stdint.h>
 
 struct flock {
 	short l_type;
@@ -35,6 +36,13 @@ int open(const char *, int, ...);
 int openat(int, const char *, int, ...);
 int posix_fadvise(int, off_t, off_t, int);
 int posix_fallocate(int, off_t, off_t);
+
+struct open_how {
+	uint64_t flags;
+	uint64_t mode;
+	uint64_t resolve;
+};
+int openat2(int, const char *, struct open_how *, size_t);
 
 #define O_SEARCH   O_PATH
 #define O_EXEC     O_PATH

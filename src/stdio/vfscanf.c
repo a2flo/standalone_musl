@@ -337,3 +337,4 @@ match_fail:
 }
 
 weak_alias(vfscanf,__isoc99_vfscanf);
+weak_alias(vfscanf,__isoc23_vfscanf);
