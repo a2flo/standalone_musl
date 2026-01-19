@@ -66,7 +66,7 @@ const char *strerrordesc_np(int e) {
 	else if (e==EDQUOT_ORIG) e=EDQUOT;
 #endif
 	if (e >= sizeof errmsgidx / sizeof *errmsgidx) e = 0;
-	return &errmsgstr + errmsgidx[e];
+	return (const char *)&errmsgstr + errmsgidx[e];
 }
 
 const char *strerrorname_np(int e) {
@@ -75,7 +75,7 @@ const char *strerrorname_np(int e) {
 	else if (e==EDQUOT_ORIG) e=EDQUOT;
 #endif
 	if (e >= sizeof errcodeidx / sizeof *errcodeidx) e = 0;
-	return &errcodestr + errcodeidx[e];
+	return (const char *)&errcodestr + errcodeidx[e];
 }
 
 weak_alias(__strerror_l, strerror_l);
