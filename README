@@ -1,6 +1,6 @@
 This repository implements a musl libc fork that provides enhanced glibc
 compatibility and facilitates the creation of "semi-static" binaries.
-This is currently based on musl v1.2.5 (@0784374d56).
+This is currently based on musl v1.2.6 (@9fa28ece75).
 
 
 Goals:
