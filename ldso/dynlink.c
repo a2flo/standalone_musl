@@ -2348,7 +2348,7 @@ static void *do_dlsym(struct dso *p, const char *s, void *ra)
 		use_deps = 1;
 	struct symdef def = find_sym2(p, s, 0, use_deps);
 	if (!def.sym) {
-		error("Symbol not found: %s", s);
+		error("Symbol not found: %s (in %s)", s, p && p->name ? p->name : "<no-dso-name>");
 		return 0;
 	}
 	if ((def.sym->st_info&0xf) == STT_TLS)
