@@ -69,3 +69,10 @@ float logf(float x)
 	y = y * r2 + (y0 + r);
 	return eval_as_float(y);
 }
+
+// NOTE: technically this should use _Float128, but long double works on clang and has the same width on supported 64-bit platforms
+#if __INTPTR_WIDTH__ == 64
+long double logf128(long double x) {
+	return __builtin_logf128(x);
+}
+#endif
